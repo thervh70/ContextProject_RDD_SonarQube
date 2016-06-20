@@ -6,7 +6,7 @@ import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 
-import static org.sonarsource.plugins.example.measures.ExampleMetrics.FILENAME_SIZE;
+import static org.sonarsource.plugins.example.measures.PullRequestMetrics.FILENAME_SIZE;
 
 /**
  * Scanner feeds raw measures on files but must not aggregate values to directories and project.
@@ -21,7 +21,6 @@ public class SetSizeOnFilesSensor implements Sensor {
   @Override
   public void execute(SensorContext context) {
     FileSystem fs = context.fileSystem();
-    // only "main" files, but not "tests"
     Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasType(InputFile.Type.MAIN));
     for (InputFile file : files) {
       context.<Integer>newMeasure()

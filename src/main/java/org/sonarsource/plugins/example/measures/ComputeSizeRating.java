@@ -3,11 +3,11 @@ package org.sonarsource.plugins.example.measures;
 import org.sonar.api.ce.measure.Measure;
 import org.sonar.api.ce.measure.MeasureComputer;
 
-import static org.sonarsource.plugins.example.measures.ExampleMetrics.FILENAME_SIZE;
-import static org.sonarsource.plugins.example.measures.ExampleMetrics.FILENAME_SIZE_RATING;
+import static org.sonarsource.plugins.example.measures.PullRequestMetrics.FILENAME_SIZE;
+import static org.sonarsource.plugins.example.measures.PullRequestMetrics.FILENAME_SIZE_RATING;
 
 /**
- * Rating is computed from value of metric {@link ExampleMetrics#FILENAME_SIZE}.
+ * Rating is computed from value of metric {@link PullRequestMetrics#FILENAME_SIZE}.
  */
 public class ComputeSizeRating implements MeasureComputer {
 
