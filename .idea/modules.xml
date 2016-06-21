@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/sonar-example-plugin.iml" filepath="$PROJECT_DIR$/sonar-example-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sonar-example-plugin.iml" filepath="$PROJECT_DIR$/sonar-example-plugin.iml" />
     </modules>
   </component>
 </project>
