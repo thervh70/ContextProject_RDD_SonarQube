@@ -12,15 +12,11 @@ import org.json.JSONObject;
 
 public class JSONReader {
 
-    private static String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
-        }
-        return sb.toString();
-    }
-
+    /**
+     * Open a Stream with a URL, get the JSON response
+     * @param url
+     * @return
+     */
     public static JSONObject getJSON(String url) {
         InputStream is;
         try {
@@ -33,6 +29,20 @@ public class JSONReader {
             e.printStackTrace();
             return null;
         }
+    }
 
+    /**
+     * Read all the things
+     * @param rd
+     * @return
+     * @throws IOException
+     */
+    private static String readAll(Reader rd) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        int cp;
+        while ((cp = rd.read()) != -1) {
+            sb.append((char) cp);
+        }
+        return sb.toString();
     }
 }
