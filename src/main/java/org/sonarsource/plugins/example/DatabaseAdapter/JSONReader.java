@@ -23,6 +23,9 @@ public class JSONReader {
             is = new URL(url).openStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             String jsonText = readAll(rd);
+            if (jsonText.toCharArray()[0] == '[') {
+                jsonText = "{\"array\":" + jsonText + "}";
+            }
             JSONObject json = new JSONObject(jsonText);
             return json;
         } catch (IOException e) {
@@ -44,5 +47,20 @@ public class JSONReader {
             sb.append((char) cp);
         }
         return sb.toString();
+    }
+
+    /**
+     * Used for testing purposes only.
+     * @param args
+     */
+    public static void main(String[] args) {
+        GitHubAPIAdapter adapter = new GitHubAPIAdapter();
+        String[] json = adapter.getReposByUsername("thervh70");
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < json.length; i++) {
+            builder.append(json[i]);
+            builder.append("\n");
+        }
+        System.out.println(builder.toString());
     }
 }
