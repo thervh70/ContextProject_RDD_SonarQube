@@ -82,4 +82,4 @@ hs_err_pid*
 
 # Build file
 build.sh
-src/main/java/org.sonarsource/plugins/example/web/ExampleFooter.java
+src/main/java/org/sonarsource/plugins/example/web/ExampleFooter.java
