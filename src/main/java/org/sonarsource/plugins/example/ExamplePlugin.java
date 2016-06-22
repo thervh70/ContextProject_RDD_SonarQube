@@ -36,6 +36,6 @@ public class ExamplePlugin implements Plugin {
 //      .addExtension(SayHelloFromScanner.class);
 //
 //    // tutorial on web extensions
-    context.addExtensions(ExampleFooter.class, ExampleWidget.class);
+//    context.addExtensions(ExampleFooter.class, ExampleWidget.class);
   }
 }
