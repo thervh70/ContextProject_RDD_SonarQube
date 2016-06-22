@@ -5,6 +5,8 @@ import org.sonarsource.plugins.example.measures.ComputeSizeAverage;
 import org.sonarsource.plugins.example.measures.ComputeSizeRating;
 import org.sonarsource.plugins.example.measures.PullRequestMetrics;
 import org.sonarsource.plugins.example.measures.SetSizeOnFilesSensor;
+import org.sonarsource.plugins.example.web.ExampleFooter;
+import org.sonarsource.plugins.example.web.ExampleWidget;
 
 /**
  * This class is the entry point for all extensions. It is referenced in pom.xml.
@@ -34,6 +36,6 @@ public class ExamplePlugin implements Plugin {
 //      .addExtension(SayHelloFromScanner.class);
 //
 //    // tutorial on web extensions
-//    context.addExtensions(ExampleFooter.class, ExampleWidget.class);
+    context.addExtensions(ExampleFooter.class, ExampleWidget.class);
   }
 }
