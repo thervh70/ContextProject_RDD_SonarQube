@@ -1,11 +1,13 @@
 package org.sonarsource.plugins.example.web;
 
 import org.sonar.api.web.Footer;
+import org.sonarsource.plugins.example.DatabaseAdapter.GitHubAPIAdapter;
 
 public final class ExampleFooter implements Footer {
 
   @Override
   public String getHtml() {
-    return "<p>Footer Example - <em>This is static HTML</em></p>";
+    GitHubAPIAdapter adapter = new GitHubAPIAdapter();
+    return "<p>" + adapter.getUser("MathiasMeuleman") + "</p>";
   }
 }
