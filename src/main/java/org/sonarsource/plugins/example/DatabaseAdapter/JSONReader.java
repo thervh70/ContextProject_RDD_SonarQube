@@ -1,5 +1,11 @@
 package org.sonarsource.plugins.example.DatabaseAdapter;
 
+import org.json.JSONObject;
+import org.sonarsource.plugins.example.entities.File;
+import org.sonarsource.plugins.example.entities.PullRequest;
+import org.sonarsource.plugins.example.entities.Repository;
+import org.sonarsource.plugins.example.entities.User;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,9 +14,6 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-
-import org.json.JSONObject;
-import org.sonarsource.plugins.example.entities.PullRequest;
 
 public class JSONReader {
 
@@ -57,13 +60,21 @@ public class JSONReader {
      */
     public static void main(String[] args) {
         GitHubAPIAdapter adapter = new GitHubAPIAdapter();
-        ArrayList<PullRequest> json = adapter.getOpenPullsByReponame("thervh70", "ContextProject_RDD");
-//        ArrayList<File> files = adapter.getFilesByPullID("thervh70", "ContextProject_RDD", 176);
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < json.size(); i++) {
-            builder.append(json.get(i).getId());
-            builder.append("\n");
+        AaronAPIAdapter aaron = new AaronAPIAdapter();
+        ArrayList<User> userList = aaron.getUsers();
+        for (User user : userList){
+            for (Repository repo : user.getRepositoryList()) {
+                ArrayList<PullRequest> pullRequestList = adapter.getOpenPullsByReponame(user.getName(), repo.getName());
+                for (PullRequest pullRequest : pullRequestList) {
+                    System.out.println(user.getName() + " " + repo.getName() + " " + pullRequest.getId());
+                    ArrayList<File> files = adapter.getFilesByPullID(user.getName(), repo.getName(), pullRequest.getId());
+                    StringBuilder builder = new StringBuilder();
+                    for (int i = 0; i < files.size(); i++) {
+                        builder.append(files.get(i).getName()).append("\n");
+                    }
+                    System.out.println(builder.toString());
+                }
+            }
         }
-        System.out.println(builder.toString());
     }
 }
