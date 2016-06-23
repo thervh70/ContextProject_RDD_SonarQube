@@ -15,6 +15,10 @@ public class AaronAPIAdapter {
     private final static String IP = "http://146.185.128.124/api/";
     private final static String FORMAT = "/?format=json";
 
+    /**
+     * Get all the Users from the API
+     * @return
+     */
     public ArrayList<User> getUsers() {
         JSONObject json = JSONReader.getJSON(IP + "users" + FORMAT);
         JSONArray array = json.getJSONArray("results");
@@ -27,6 +31,11 @@ public class AaronAPIAdapter {
         return users;
     }
 
+    /**
+     * Set all the repositories in the given Users
+     * @param userList
+     * @return
+     */
     public ArrayList<User> getRepositories(ArrayList<User> userList) {
         JSONObject json = JSONReader.getJSON(IP + "repositories" + FORMAT);
         JSONArray array = json.getJSONArray("results");
@@ -43,6 +52,11 @@ public class AaronAPIAdapter {
         return userList;
     }
 
+    /**
+     * Set all the PullRequests in the given Repository
+     * @param repo
+     * @return
+     */
     public Repository getPullRequests(Repository repo) {
         JSONObject json = JSONReader.getJSON(IP + "pull-requests" + FORMAT);
         JSONArray array = json.getJSONArray("results");

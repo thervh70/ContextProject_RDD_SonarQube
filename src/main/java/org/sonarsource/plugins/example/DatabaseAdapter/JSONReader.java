@@ -1,6 +1,5 @@
 package org.sonarsource.plugins.example.DatabaseAdapter;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -48,19 +47,5 @@ public class JSONReader {
             sb.append((char) cp);
         }
         return sb.toString();
-    }
-
-    /**
-     * Used for testing purposes only.
-     * @param args
-     */
-    public static void main(String[] args) {
-        String IP = "http://146.185.128.124/api/";
-        String FORMAT = "/?format=json";
-
-        JSONObject json = JSONReader.getJSON(IP + "pull-requests" + FORMAT);
-        JSONArray array = json.getJSONArray("results");
-        String platform = ((JSONObject) array.get(0)).get("repository").toString();
-        System.out.println(platform);
     }
 }

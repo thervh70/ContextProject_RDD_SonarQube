@@ -32,10 +32,6 @@ public class Repository {
         return name;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
     public void addPullRequest(PullRequest pull) {
         this.pullRequestList.add(pull);
     }
