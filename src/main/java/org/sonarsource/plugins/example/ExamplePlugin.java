@@ -2,6 +2,7 @@ package org.sonarsource.plugins.example;
 
 import org.sonar.api.Plugin;
 import org.sonarsource.plugins.example.measures.ComputeSizeAverage;
+import org.sonarsource.plugins.example.measures.ComputeSizeRating;
 import org.sonarsource.plugins.example.measures.PullRequestMetrics;
 import org.sonarsource.plugins.example.measures.SetSizeOnFilesSensor;
 import org.sonarsource.plugins.example.web.ExampleFooter;
@@ -23,7 +24,7 @@ public class ExamplePlugin implements Plugin {
 
     // tutorial on measures
     context
-      .addExtensions(PullRequestMetrics.class, SetSizeOnFilesSensor.class, ComputeSizeAverage.class);
+      .addExtensions(PullRequestMetrics.class, SetSizeOnFilesSensor.class, ComputeSizeAverage.class, ComputeSizeRating.class);
 
 //    // tutorial on rules
 //    context.addExtensions(JavaRulesDefinition.class, CreateIssuesOnJavaFilesSensor.class);
