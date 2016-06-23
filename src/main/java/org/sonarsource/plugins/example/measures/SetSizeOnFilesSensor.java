@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import static org.sonarsource.plugins.example.measures.PullRequestMetrics.FILENAME_SIZE;
+import static org.sonarsource.plugins.example.measures.PullRequestMetrics.PULLREQUEST_SIZE;
 
 /**
  * Scanner feeds raw measures on files but must not aggregate values to directories and project.
@@ -46,7 +46,7 @@ public class SetSizeOnFilesSensor implements Sensor {
         calculateFile(user, repo, pullRequestList);
         for (InputFile file : files) {
             context.<Integer>newMeasure()
-                    .forMetric(FILENAME_SIZE)
+                    .forMetric(PULLREQUEST_SIZE)
                     .on(file)
                     .withValue(occurrences.get(file.file().getName()))
                     .save();
