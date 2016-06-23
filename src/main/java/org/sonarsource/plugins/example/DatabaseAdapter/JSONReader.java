@@ -7,8 +7,10 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 import org.json.JSONObject;
+import org.sonarsource.plugins.example.entities.PullRequest;
 
 public class JSONReader {
 
@@ -55,10 +57,11 @@ public class JSONReader {
      */
     public static void main(String[] args) {
         GitHubAPIAdapter adapter = new GitHubAPIAdapter();
-        String[] json = adapter.getReposByUsername("thervh70");
+        ArrayList<PullRequest> json = adapter.getOpenPullsByReponame("thervh70", "ContextProject_RDD");
+//        ArrayList<File> files = adapter.getFilesByPullID("thervh70", "ContextProject_RDD", 176);
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < json.length; i++) {
-            builder.append(json[i]);
+        for (int i = 0; i < json.size(); i++) {
+            builder.append(json.get(i).getId());
             builder.append("\n");
         }
         System.out.println(builder.toString());

@@ -8,4 +8,13 @@ import java.util.ArrayList;
 public class PullRequest {
     private int id;
     private ArrayList<File> fileList;
+
+    public PullRequest(int id, ArrayList<File> fileList) {
+        this.id = id;
+        this.fileList = fileList;
+    }
+
+    public int getId() {
+        return id;
+    }
 }
