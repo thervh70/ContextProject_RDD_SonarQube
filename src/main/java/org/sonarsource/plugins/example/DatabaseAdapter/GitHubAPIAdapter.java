@@ -6,6 +6,9 @@ import org.json.JSONObject;
 import org.sonarsource.plugins.example.entities.File;
 import org.sonarsource.plugins.example.entities.PullRequest;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -27,11 +30,28 @@ public class GitHubAPIAdapter {
         return name;
     }
 
+    public JSONObject sendWithAuth(String target) {
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader("../../../resources/auth/auth-secrets.txt"));
+            String client_id = reader.readLine();
+            String client_secret = reader.readLine();
+            reader.close();
+            client_id = client_id.substring(client_id.indexOf(':')).trim();
+            client_secret = client_secret.substring(client_secret.indexOf(':')).trim();
+            target = target + "?client_id=" + client_id + "&client_secret=" + client_secret;
+            return JSONReader.getJSON(target);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     //This is now done in the AaronAPIAdapter
 
 //    public Repository[] getReposByUsername(String user) {
 //        String target = ghAPI + "users/" + user + "/repos";
-//        JSONArray repoarray = JSONReader.getJSON(target).getJSONArray("array");
+//        JSONArray repoarray = sendWithAuth(target).getJSONArray("array");
 //        Repository[] result = new Repository[repoarray.length()];
 //        for (int i = 0; i < repoarray.length(); i++) {
 //            JSONObject repo = (JSONObject) repoarray.get(i);
@@ -45,19 +65,19 @@ public class GitHubAPIAdapter {
 
 //    public File[] getFilesByReponame(String repo, String user, String pr) {
 //        String target = ghAPI + "repos/" + user + "/" + repo + "/pulls/" + pr;
-//        JSONArray pull = JSONReader.getJSON(target).getJSONArray("array");
+//        JSONArray pull = sendWithAuth(target).getJSONArray("array");
 //    }
 
 //    public String getBaseBranchByPullnumber(int pull) {
 //        getOpenPullsByReponame();
 //        findPullByPullNumber();
 //        String target = "";
-//        JSONReader.getJSON(target);
+//        sendWithAuth(target);
 //    }
 
     public ArrayList<PullRequest> getOpenPullsByReponame(String user, String repo) {
         String target = ghAPI + "repos/" + user + "/" + repo + "/pulls";
-        JSONArray pulls = JSONReader.getJSON(target).getJSONArray("array");
+        JSONArray pulls = sendWithAuth(target).getJSONArray("array");
         ArrayList<PullRequest> result = new ArrayList<>();
         for (int i = 0; i < pulls.length(); i++) {
             JSONObject pullObject = (JSONObject) pulls.get(i);
@@ -70,7 +90,7 @@ public class GitHubAPIAdapter {
 
     public ArrayList<File> getFilesByPullID(String user, String repo, int pullnumber) {
         String target = ghAPI + "repos/" + user + "/" + repo + "/pulls/" + pullnumber + "/files";
-        JSONArray files = JSONReader.getJSON(target).getJSONArray("array");
+        JSONArray files = sendWithAuth(target).getJSONArray("array");
         ArrayList<File> result = new ArrayList<>();
         for (int i = 0; i < files.length(); i++) {
             JSONObject fileObject = (JSONObject) files.get(i);
