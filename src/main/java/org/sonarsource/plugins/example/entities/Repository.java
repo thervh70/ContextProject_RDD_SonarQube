@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Repository {
     private String name;
     private String url;
+    private User owner;
     private ArrayList<PullRequest> pullRequestList;
 
     public Repository(String name, String url) {
