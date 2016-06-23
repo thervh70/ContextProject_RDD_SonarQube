@@ -4,7 +4,6 @@ package org.sonarsource.plugins.example.DatabaseAdapter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sonarsource.plugins.example.entities.File;
-import org.sonarsource.plugins.example.entities.Repository;
 import org.sonarsource.plugins.example.entities.PullRequest;
 
 import java.util.ArrayList;
@@ -28,19 +27,21 @@ public class GitHubAPIAdapter {
         return name;
     }
 
-    public Repository[] getReposByUsername(String user) {
-        String target = ghAPI + "users/" + user + "/repos";
-        JSONArray repoarray = JSONReader.getJSON(target).getJSONArray("array");
-        Repository[] result = new Repository[repoarray.length()];
-        for (int i = 0; i < repoarray.length(); i++) {
-            JSONObject repo = (JSONObject) repoarray.get(i);
-            String repoName = repo.getString("name");
-            String repoUrl = repo.getString("html_url");
-            ArrayList<PullRequest> pulls = getOpenPullsByReponame(user, repoName);
-            result[i] = new Repository(repoName, repoUrl, pulls);
-        }
-        return result;
-    }
+    //This is now done in the AaronAPIAdapter
+
+//    public Repository[] getReposByUsername(String user) {
+//        String target = ghAPI + "users/" + user + "/repos";
+//        JSONArray repoarray = JSONReader.getJSON(target).getJSONArray("array");
+//        Repository[] result = new Repository[repoarray.length()];
+//        for (int i = 0; i < repoarray.length(); i++) {
+//            JSONObject repo = (JSONObject) repoarray.get(i);
+//            String repoName = repo.getString("name");
+//            String repoUrl = repo.getString("html_url");
+//            ArrayList<PullRequest> pulls = getOpenPullsByReponame(user, repoName);
+//            result[i] = new Repository(repoName, user, repoUrl);
+//        }
+//        return result;
+//    }
 
 //    public File[] getFilesByReponame(String repo, String user, String pr) {
 //        String target = ghAPI + "repos/" + user + "/" + repo + "/pulls/" + pr;
