@@ -59,9 +59,9 @@ public class JSONReader {
      * @param args
      */
     public static void main(String[] args) {
-        User user = SetSizeOnFilesSensor.initUser(new AaronAPIAdapter());
-        Repository repo = SetSizeOnFilesSensor.initRepo(user);
-        ArrayList<PullRequest> pulls = SetSizeOnFilesSensor.initPullRequest(new GitHubAPIAdapter(), user, repo);
-        SetSizeOnFilesSensor.calculateFile(user, repo, pulls);
+        User user = Test.initUser(new AaronAPIAdapter());
+        Repository repo = Test.initRepo(user);
+        ArrayList<PullRequest> pulls = Test.initPullRequest(new GitHubAPIAdapter(), user, repo);
+        Test.calculateFile(user, repo, pulls);
     }
 }
