@@ -39,7 +39,7 @@ public class SetSizeOnFilesSensor implements Sensor {
         AaronAPIAdapter aaron = new AaronAPIAdapter();
         User user = initUser(aaron);
         Repository repo = initRepo(user);
-        ArrayList<PullRequest> pullRequestList = null;
+        ArrayList<PullRequest> pullRequestList = initPullRequest(aaron, repo);
         for (InputFile file : files) {
             occurrences.put(file.file().getName(), 0);
         }
@@ -74,9 +74,9 @@ public class SetSizeOnFilesSensor implements Sensor {
         return repo;
     }
 
-//    public static ArrayList<PullRequest> initPullRequest(GitHubAPIAdapter adapter, User user, Repository repo) {
-//        return adapter.getOpenPullsByReponame(user.getName(), repo.getName());
-//    }
+    public static ArrayList<PullRequest> initPullRequest(AaronAPIAdapter adapter, Repository repo) {
+        return adapter.getPullRequests(repo).getPullRequestList();
+    }
 
     private static void printHashmap() {
         Set<String> keys = occurrences.keySet();

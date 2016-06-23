@@ -20,11 +20,10 @@ public class AaronAPIAdapter {
         JSONArray array = json.getJSONArray("results");
         ArrayList<User> users = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {
-            String username = ((JSONObject) array.get(i)).get("username").toString();
+            String username = ((JSONObject) array.get(i)).getString("username");
             users.add(new User(username));
         }
         users = getRepositories(users);
-
         return users;
     }
 
@@ -33,10 +32,10 @@ public class AaronAPIAdapter {
         JSONArray array = json.getJSONArray("results");
         for (User user : userList) {
             for (int i = 0; i < array.length(); i++) {
-                String platform = ((JSONObject) array.get(i)).get("platform").toString();
-                String owner = ((JSONObject) array.get(i)).get("owner").toString();
+                String platform = ((JSONObject) array.get(i)).getString("platform");
+                String owner = ((JSONObject) array.get(i)).getString("owner");
                 if (platform.equals("GitHub") && owner.equals(user.getName())) {
-                    String reponame = ((JSONObject) array.get(i)).get("name").toString();
+                    String reponame = ((JSONObject) array.get(i)).getString("name");
                     user.addRepository(new Repository(reponame, user, ""));
                 }
             }
@@ -44,20 +43,18 @@ public class AaronAPIAdapter {
         return userList;
     }
 
-    public ArrayList<Repository> getPullRequests(ArrayList<Repository> repoList) {
+    public Repository getPullRequests(Repository repo) {
         JSONObject json = JSONReader.getJSON(IP + "pull-requests" + FORMAT);
         JSONArray array = json.getJSONArray("results");
-        for (Repository repo : repoList) {
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject repoObject = (JSONObject) ((JSONObject) array.get(i)).get("repository");
-                String platform = ((JSONObject) array.get(i)).get("platform").toString();
-                String reponame = ((JSONObject) array.get(i)).get("name").toString();
-                if (platform.equals("GitHub") && repo.getName().equals(reponame)) {
-                    int pullNumber = ((JSONObject) array.get(i)).getInt("pull_request_number");
-                    repo.addPullRequest(new PullRequest(pullNumber));
-                }
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject repositoryObject = ((JSONObject) array.get(i)).getJSONObject("repository");
+            String platform = repositoryObject.getString("platform");
+            String reponame = repositoryObject.getString("name");
+            if (platform.equals("GitHub") && repo.getName().equals(reponame)) {
+                int pullNumber = ((JSONObject) array.get(i)).getInt("pull_request_number");
+                repo.addPullRequest(new PullRequest(pullNumber));
             }
         }
-        return repoList;
+        return repo;
     }
 }
