@@ -7,5 +7,5 @@ import java.util.ArrayList;
  */
 public class User {
     private String name;
-    private ArrayList<Project> projectList;
+    private ArrayList<Repository> repositoryList;
 }
