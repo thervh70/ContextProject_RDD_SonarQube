@@ -55,8 +55,10 @@ public class JSONReader {
      * @param args
      */
     public static void main(String[] args) {
-        SetSizeOnFilesSensor ex = new SetSizeOnFilesSensor();
-        System.out.println("ESBData.ts " + ex.calculateFile("ElementSelectionBehaviourData.ts"));
-        System.out.println("MainController.ts " + ex.calculateFile("MainController.ts"));
+        GitHubAPIAdapter a = new GitHubAPIAdapter();
+        a.sendWithAuth("https://api.github.com/users/thervh70");
+//        SetSizeOnFilesSensor ex = new SetSizeOnFilesSensor();
+//        System.out.println("ESBData.ts " + ex.calculateFile("ElementSelectionBehaviourData.ts"));
+//        System.out.println("MainController.ts " + ex.calculateFile("MainController.ts"));
     }
 }

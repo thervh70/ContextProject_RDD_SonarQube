@@ -9,6 +9,7 @@ import org.sonarsource.plugins.example.entities.PullRequest;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -33,12 +34,14 @@ public class GitHubAPIAdapter {
     public JSONObject sendWithAuth(String target) {
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader("../../../resources/auth/auth-secrets.txt"));
+            String location = System.getProperty("user.dir");
+            System.out.println(location);
+            reader = new BufferedReader(new FileReader("src/auth-secrets.txt"));
             String client_id = reader.readLine();
             String client_secret = reader.readLine();
             reader.close();
-            client_id = client_id.substring(client_id.indexOf(':')).trim();
-            client_secret = client_secret.substring(client_secret.indexOf(':')).trim();
+            client_id = client_id.substring(client_id.indexOf(':') + 1).trim();
+            client_secret = client_secret.substring(client_secret.indexOf(':') + 1).trim();
             target = target + "?client_id=" + client_id + "&client_secret=" + client_secret;
             return JSONReader.getJSON(target);
         } catch (IOException e) {

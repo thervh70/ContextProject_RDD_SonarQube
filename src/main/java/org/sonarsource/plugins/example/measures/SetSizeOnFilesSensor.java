@@ -21,44 +21,52 @@ import static org.sonarsource.plugins.example.measures.PullRequestMetrics.FILENA
  * This class emulates loading of file measures from a 3rd-party analyser.
  */
 public class SetSizeOnFilesSensor implements Sensor {
-  @Override
-  public void describe(SensorDescriptor descriptor) {
-    descriptor.name("Compute size of file names");
-  }
-
-  @Override
-  public void execute(SensorContext context) {
-    FileSystem fs = context.fileSystem();
-    Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasType(InputFile.Type.MAIN));
-    for (InputFile file : files) {
-      int occurenceNumber = calculateFile(file.file().getName());
-      context.<Integer>newMeasure()
-        .forMetric(FILENAME_SIZE)
-        .on(file)
-        .withValue(occurenceNumber)
-        .save();
+    @Override
+    public void describe(SensorDescriptor descriptor) {
+        descriptor.name("Compute size of file names");
     }
-  }
 
-  public int calculateFile(String fileName) {
-    int res = 0;
-    GitHubAPIAdapter adapter = new GitHubAPIAdapter();
-    AaronAPIAdapter aaron = new AaronAPIAdapter();
-    ArrayList<User> userList = aaron.getUsers();
-    for (User user : userList){
-      for (Repository repo : user.getRepositoryList()) {
+    @Override
+    public void execute(SensorContext context) {
+        FileSystem fs = context.fileSystem();
+        Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasType(InputFile.Type.MAIN));
+        for (InputFile file : files) {
+            int occurenceNumber = calculateFile(file.file().getName());
+            context.<Integer>newMeasure()
+                    .forMetric(FILENAME_SIZE)
+                    .on(file)
+                    .withValue(occurenceNumber)
+                    .save();
+        }
+    }
+
+    public int calculateFile(String fileName) {
+        int res = 0;
+        GitHubAPIAdapter adapter = new GitHubAPIAdapter();
+        AaronAPIAdapter aaron = new AaronAPIAdapter();
+        ArrayList<User> userList = aaron.getUsers();
+        User user = null;
+        Repository repo = null;
+        for (User u : userList) {
+            if (u.getName().equals("thervh70")) {
+                user = u;
+            }
+        }
+        for (Repository r : user.getRepositoryList()) {
+            if (r.getName().equals("ContextProject_RDD")) {
+                repo = r;
+            }
+        }
         ArrayList<PullRequest> pullRequestList = adapter.getOpenPullsByReponame(user.getName(), repo.getName());
         for (PullRequest pullRequest : pullRequestList) {
-          System.out.println(user.getName() + " " + repo.getName() + " " + pullRequest.getId());
-          ArrayList<File> files = adapter.getFilesByPullID(user.getName(), repo.getName(), pullRequest.getId());
-          for (File file : files) {
-            if (file.getName().equals(fileName)) {
-              res++;
+            System.out.println(user.getName() + " " + repo.getName() + " " + pullRequest.getId());
+            ArrayList<File> files = adapter.getFilesByPullID(user.getName(), repo.getName(), pullRequest.getId());
+            for (File file : files) {
+                if (file.getName().equals(fileName)) {
+                    res++;
+                }
             }
-          }
         }
-      }
+        return res;
     }
-    return res;
-  }
 }
