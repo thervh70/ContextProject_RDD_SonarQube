@@ -14,8 +14,8 @@ import org.sonarsource.plugins.example.entities.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static org.sonarsource.plugins.example.measures.PullRequestMetrics.FILENAME_SIZE;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Scanner feeds raw measures on files but must not aggregate values to directories and project.
@@ -23,7 +23,7 @@ import static org.sonarsource.plugins.example.measures.PullRequestMetrics.FILENA
  */
 public class SetSizeOnFilesSensor implements Sensor {
 
-    private HashMap<String, Integer> occurences = new HashMap<>();
+    private static HashMap<String, Integer> occurrences = new HashMap<>();
 
     @Override
     public void describe(SensorDescriptor descriptor) {
@@ -34,20 +34,18 @@ public class SetSizeOnFilesSensor implements Sensor {
     public void execute(SensorContext context) {
         FileSystem fs = context.fileSystem();
         Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasType(InputFile.Type.MAIN));
+        GitHubAPIAdapter adapter = new GitHubAPIAdapter();
         AaronAPIAdapter aaron = new AaronAPIAdapter();
         User user = initUser(aaron);
         Repository repo = initRepo(user);
+        ArrayList<PullRequest> pullRequestList = initPullRequest(adapter, user, repo);
         for (InputFile file : files) {
-            int occurenceNumber = calculateFile(file.file().getName(), user, repo);
-            context.<Integer>newMeasure()
-                    .forMetric(FILENAME_SIZE)
-                    .on(file)
-                    .withValue(occurenceNumber)
-                    .save();
+            occurrences.put(file.file().getName(), 0);
         }
+        calculateFile(user, repo, pullRequestList);
     }
 
-    private User initUser(AaronAPIAdapter aaron) {
+    public static User initUser(AaronAPIAdapter aaron) {
         User user = null;
         ArrayList<User> userList = aaron.getUsers();
         for (User u : userList) {
@@ -58,7 +56,7 @@ public class SetSizeOnFilesSensor implements Sensor {
         return user;
     }
 
-    private Repository initRepo(User user) {
+    public static Repository initRepo(User user) {
         Repository repo = null;
         for (Repository r : user.getRepositoryList()) {
             if (r.getName().equals("ContextProject_RDD")) {
@@ -68,19 +66,26 @@ public class SetSizeOnFilesSensor implements Sensor {
         return repo;
     }
 
-    public int calculateFile(String fileName, User user, Repository repo) {
-        int res = 0;
+    public static ArrayList<PullRequest> initPullRequest(GitHubAPIAdapter adapter, User user, Repository repo) {
+        return adapter.getOpenPullsByReponame(user.getName(), repo.getName());
+    }
+
+    private static void printHashmap() {
+        Set<String> keys = occurrences.keySet();
+        for (String key : keys) {
+            System.out.println(key + " : " + occurrences.get(key));
+        }
+    }
+
+    public static void calculateFile(User user, Repository repo, ArrayList<PullRequest> pullRequestList) {
         GitHubAPIAdapter adapter = new GitHubAPIAdapter();
-        ArrayList<PullRequest> pullRequestList = adapter.getOpenPullsByReponame(user.getName(), repo.getName());
         for (PullRequest pullRequest : pullRequestList) {
             System.out.println(user.getName() + " " + repo.getName() + " " + pullRequest.getId());
             ArrayList<File> files = adapter.getFilesByPullID(user.getName(), repo.getName(), pullRequest.getId());
             for (File file : files) {
-                if (file.getName().equals(fileName)) {
-                    res++;
-                }
+                occurrences.put(file.getName(), occurrences.get(file.getName()) + 1);
             }
         }
-        return res;
+        printHashmap();
     }
 }

@@ -1,6 +1,9 @@
 package org.sonarsource.plugins.example.DatabaseAdapter;
 
 import org.json.JSONObject;
+import org.sonarsource.plugins.example.entities.PullRequest;
+import org.sonarsource.plugins.example.entities.Repository;
+import org.sonarsource.plugins.example.entities.User;
 import org.sonarsource.plugins.example.measures.SetSizeOnFilesSensor;
 
 import java.io.BufferedReader;
@@ -10,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 public class JSONReader {
 
@@ -55,10 +59,9 @@ public class JSONReader {
      * @param args
      */
     public static void main(String[] args) {
-        GitHubAPIAdapter a = new GitHubAPIAdapter();
-        a.sendWithAuth("https://api.github.com/users/thervh70");
-//        SetSizeOnFilesSensor ex = new SetSizeOnFilesSensor();
-//        System.out.println("ESBData.ts " + ex.calculateFile("ElementSelectionBehaviourData.ts"));
-//        System.out.println("MainController.ts " + ex.calculateFile("MainController.ts"));
+        User user = SetSizeOnFilesSensor.initUser(new AaronAPIAdapter());
+        Repository repo = SetSizeOnFilesSensor.initRepo(user);
+        ArrayList<PullRequest> pulls = SetSizeOnFilesSensor.initPullRequest(new GitHubAPIAdapter(), user, repo);
+        SetSizeOnFilesSensor.calculateFile(user, repo, pulls);
     }
 }
