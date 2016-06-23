@@ -4,12 +4,10 @@ package org.sonarsource.plugins.example.DatabaseAdapter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sonarsource.plugins.example.entities.File;
-import org.sonarsource.plugins.example.entities.PullRequest;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -78,18 +76,18 @@ public class GitHubAPIAdapter {
 //        sendWithAuth(target);
 //    }
 
-    public ArrayList<PullRequest> getOpenPullsByReponame(String user, String repo) {
-        String target = ghAPI + "repos/" + user + "/" + repo + "/pulls";
-        JSONArray pulls = sendWithAuth(target).getJSONArray("array");
-        ArrayList<PullRequest> result = new ArrayList<>();
-        for (int i = 0; i < pulls.length(); i++) {
-            JSONObject pullObject = (JSONObject) pulls.get(i);
-            int pullID = pullObject.getInt("number");
-            PullRequest pull = new PullRequest(pullID, getFilesByPullID(user, repo, pullID));
-            result.add(pull);
-        }
-        return result;
-    }
+//    public ArrayList<PullRequest> getOpenPullsByReponame(String user, String repo) {
+//        String target = ghAPI + "repos/" + user + "/" + repo + "/pulls";
+//        JSONArray pulls = sendWithAuth(target).getJSONArray("array");
+//        ArrayList<PullRequest> result = new ArrayList<>();
+//        for (int i = 0; i < pulls.length(); i++) {
+//            JSONObject pullObject = (JSONObject) pulls.get(i);
+//            int pullID = pullObject.getInt("number");
+//            PullRequest pull = new PullRequest(pullID, getFilesByPullID(user, repo, pullID));
+//            result.add(pull);
+//        }
+//        return result;
+//    }
 
     public ArrayList<File> getFilesByPullID(String user, String repo, int pullnumber) {
         String target = ghAPI + "repos/" + user + "/" + repo + "/pulls/" + pullnumber + "/files";

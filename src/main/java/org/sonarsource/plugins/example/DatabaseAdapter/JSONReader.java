@@ -1,10 +1,7 @@
 package org.sonarsource.plugins.example.DatabaseAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
-import org.sonarsource.plugins.example.entities.PullRequest;
-import org.sonarsource.plugins.example.entities.Repository;
-import org.sonarsource.plugins.example.entities.User;
-import org.sonarsource.plugins.example.measures.SetSizeOnFilesSensor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 public class JSONReader {
 
@@ -59,9 +55,12 @@ public class JSONReader {
      * @param args
      */
     public static void main(String[] args) {
-        User user = Test.initUser(new AaronAPIAdapter());
-        Repository repo = Test.initRepo(user);
-        ArrayList<PullRequest> pulls = Test.initPullRequest(new GitHubAPIAdapter(), user, repo);
-        Test.calculateFile(user, repo, pulls);
+        String IP = "http://146.185.128.124/api/";
+        String FORMAT = "/?format=json";
+
+        JSONObject json = JSONReader.getJSON(IP + "pull-requests" + FORMAT);
+        JSONArray array = json.getJSONArray("results");
+        String platform = ((JSONObject) array.get(0)).get("repository").toString();
+        System.out.println(platform);
     }
 }
