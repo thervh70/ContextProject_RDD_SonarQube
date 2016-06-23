@@ -17,4 +17,8 @@ public class PullRequest {
     public int getId() {
         return id;
     }
+
+    public ArrayList<File> getFileList() {
+        return fileList;
+    }
 }

@@ -8,4 +8,17 @@ import java.util.ArrayList;
 public class User {
     private String name;
     private ArrayList<Repository> repositoryList;
+
+    public User(String name, ArrayList<Repository> repositoryList) {
+        this.name = name;
+        this.repositoryList = repositoryList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Repository> getRepositoryList() {
+        return repositoryList;
+    }
 }

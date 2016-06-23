@@ -15,4 +15,16 @@ public class Repository {
         this.url = url;
         this.pullRequestList = pullRequestList;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public ArrayList<PullRequest> getPullRequestList() {
+        return pullRequestList;
+    }
 }
