@@ -10,10 +10,10 @@ public class Repository {
     private String url;
     private ArrayList<PullRequest> pullRequestList;
 
-    public Repository(String name, String url, ArrayList<PullRequest> pullRequestList) {
+    public Repository(String name, String url) {
         this.name = name;
         this.url = url;
-        this.pullRequestList = pullRequestList;
+        this.pullRequestList = new ArrayList<>();
     }
 
     public String getName() {
@@ -22,6 +22,10 @@ public class Repository {
 
     public String getUrl() {
         return url;
+    }
+
+    public void addPullRequest(PullRequest pull) {
+        this.pullRequestList.add(pull);
     }
 
     public ArrayList<PullRequest> getPullRequestList() {
